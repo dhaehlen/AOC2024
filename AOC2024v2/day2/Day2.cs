@@ -81,42 +81,46 @@ static class Day2
 /// o - 1 - 3 - 2 we don't need to check any branches after 2 because 2 is a change of
 /// direction.
 /// 
-/// Another impovement is that we don't need to make it to a leaf node, we only need to
-/// successfuly make it to a depth of Max Depth - 1. If we make it to that depth we don't
-/// care what the last level will be because we will either be at the end of the levels
-/// becuase we already did a skip one or if it is unsafe we just skip it.
 /// </summary>
 /// 
     public static bool RecursivePathSearch(int[] array, int i, bool? currentDirection, bool skipped)
     {
-        bool bottom = false;
-        if(i + 1 == array.Length){ bottom = true; }
-
+        if(i == array.Length - 1) { return true; }
         bool result = false;
         int current = array[i];
-        int next = array[i + 1];
-        int nextnext = array[i + 2];
-        bool direction = current < next;
-        int stepSizeNext = Math.Abs(next - current);
-        int stepSizeNextNext = Math.Abs(nextnext - current);
 
-        bool stepSizeNextIsValid = stepSizeNext > 0 && stepSizeNext <= 3;
-        bool stepSizeNextNextIsValid = stepSizeNextNext > 0 && stepSizeNextNext <= 3;
-        bool directionIsValid = direction & (currentDirection ?? direction);
-       
-        if(directionIsValid && stepSizeNextIsValid && !bottom)
+        if(i + 1 < array.Length)
         {
-            result = result || RecursivePathSearch(array, i + 1, direction, skipped);
-        }
-        if(directionIsValid && stepSizeNextNextIsValid && !skipped && !bottom)
-        {
-            skipped = true;
-            result = result || RecursivePathSearch(array, i + 2, direction, skipped);
+            int next = array[i + 1];
+            bool direction = current < next;
+            int stepSizeNext = Math.Abs(next - current);
+            bool stepSizeNextIsValid = stepSizeNext > 0 && stepSizeNext <= 3;
+            bool directionIsValid = direction == (currentDirection ?? direction);
+            
+            if(!skipped && i == array.Length - 2){ return true; } 
+            if(directionIsValid && stepSizeNextIsValid)
+            {
+                result = result || RecursivePathSearch(array, i + 1, direction, skipped);
+            }
         }
 
-        if(bottom){ result = true; }
+        if(i + 2 < array.Length)
+        {
+            int nextnext = array[i + 2];
+            bool directionNext = current < nextnext;;
+            int stepSizeNextNext = Math.Abs(nextnext - current);
+            bool stepSizeNextNextIsValid = stepSizeNextNext > 0 && stepSizeNextNext <= 3;
+            bool directionNextIsValid = directionNext == (currentDirection ?? directionNext);
+
+            if(directionNextIsValid && stepSizeNextNextIsValid && !skipped)
+            {
+                skipped = true;
+                result = result || RecursivePathSearch(array, i + 2, directionNext, skipped);
+            }
+        }
         return result;
     }
+
     public static void RunDay2Part2()
     {
         int safeCount = 0;
@@ -134,8 +138,8 @@ static class Day2
             }
 
             bool safe = RecursivePathSearch(levels, 0, null, false);
-            //safe = safe || RecursivePathSearch(levels, 1, null, true);
-
+            safe = safe || RecursivePathSearch(levels, 1, null, true);
+            Console.WriteLine($"{line} is : {safe}");
             if(safe){ safeCount++; }
         }
 
