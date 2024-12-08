@@ -1,4 +1,4 @@
-namespace AOC2024v2.day1;
+namespace AOC2024v2;
 
 static class Day1
 {

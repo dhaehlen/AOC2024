@@ -1,6 +1,4 @@
-using System.Diagnostics;
-
-namespace AOC2024v2.Day2;
+namespace AOC2024v2;
 
 static class Day2
 {
