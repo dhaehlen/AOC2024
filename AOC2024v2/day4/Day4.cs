@@ -36,7 +36,7 @@ public static class Day4
         }
         int countOfXmas = 0;
 
-        //Search for X then look at the surrounding 8 squares for S. Intially we were going
+        //Search for X then look at the surrounding 8 squares for M. Intially we were going
         //to look for S or X but this would result in double counting.
         for(int i = 0; i < height; i++)
         {
@@ -270,6 +270,17 @@ public class Day4Tests
             "SAXAMASAAA",
             "MAMMMXMMMM",
             "MXMXAXMASX"],
+
+            ["SOOOOOS",
+             "OAOOOAO",
+             "OOMOMOO",
+             "OOOXOOO"],
+
+            ["..X...",
+             ".SAMX.",
+             ".A..A.",
+             "XMAS.S",
+             ".X...."],
         ];
     }
     public void RunDay4Part1Tests()
